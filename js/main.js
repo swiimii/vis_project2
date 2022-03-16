@@ -7,7 +7,7 @@ d3.csv('data/occurrences.csv')
 	  d.latitude = +d.decimalLatitude; //make sure these are not strings
 	  d.longitude = +d.decimalLongitude; //make sure these are not strings
 	  d.year = d.year != '' ? +d.year : null;
-    d.month = d.month != '' ? +d.month : null;
+    d.month = d.month.trim() != '' && d.month.trim() != '0' ? +d.month : null;
 	  d.startDayOfYear = d.startDayOfYear != '' ? +d.startDayOfYear : null;
 	  
 	  
