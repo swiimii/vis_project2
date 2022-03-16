@@ -41,24 +41,24 @@ class LeafletMap {
       attribution: vis.esriAttr,
       ext: 'png'
     });
-	vis.base_layer_topo = L.tileLayer(vis.topoURL, {
-		attribution: vis.topoAttr,
-		ext: 'png'
+	var OpenTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+		attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
 	});
-	vis.base_layer_thOut = L.tileLayer(vis.thOutURL, {
-		attribution: vis.thOutAttr,
-		ext: 'png'
+	var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		maxZoom: 19,
+		attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 	});
-	vis.base_layer_st = L.tileLayer(vis.stURL, {
-		attribution: vis.stAttr,
+	var Stamen_Terrain = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}', {
+		attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+		subdomains: 'abcd',
 		ext: 'png'
 	});
 	
 	vis.basemaps = {
 		  "ESRI": vis.base_layer,
-		  "Topography": vis.base_layer_topo,
-		  "Thunderforest Outdoors": vis.base_layer_thOut,
-		  "Stamen": vis.base_layer_st
+		  "Topography": OpenTopoMap,
+		  "Street Map": OpenStreetMap_Mapnik,
+		  "Stamen Terrain": Stamen_Terrain
 	};
 
     vis.theMap = L.map('my-map', {
@@ -78,9 +78,9 @@ class LeafletMap {
 	vis.colorScaleStartDay = d3.scaleSequential()
 		.interpolator(d3.interpolateOranges)
 		.domain(d3.extent(vis.data, d => d.startDayOfYear));
-		
+	
 	vis.colorScaleClass = d3.scaleOrdinal()
-		.domain(d3.map(vis.data, function(d){return d.class;}).keys())
+		.domain(new Set(vis.data.map(d => d.phylum)))
 		.range(d3.schemeAccent);
 
     //if you stopped here, you would just have a map
@@ -176,6 +176,7 @@ class LeafletMap {
     vis.theMap.on("zoomend", function(){
       vis.updateVis();
     });
+	
 
   }
 
