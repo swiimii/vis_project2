@@ -1,17 +1,21 @@
 // ES6 Class
 class BarChart {
 
-  constructor(_config, _data, _data_selection, max_bars=12, _legend) {
+  constructor(_config, _data, _data_selection, _maxBars=12, _sortByValue=false, _legend) {
     this.config = {
+      title: _config.title || "Missing Title",
+      yLabel: _config.yLabel || "Missing Axis Label",
       parentElement: _config.parentElement,
       containerWidth: _config.containerWidth || 500,
       containerHeight: _config.containerHeight || 300,
-      margin: { top: 10, bottom: 100, right: 50, left: 50 }
+      margin: { top: 20, bottom: 100, right: 50, left: 60 }
     }
 
     this.data = _data;
     this.data_selection = _data_selection;
     this.legend = _legend;
+    this.sortByValue = _sortByValue;
+    this.maxBars = _maxBars;
 
     // Call a class function
     this.initVis();
@@ -34,6 +38,20 @@ class BarChart {
         vis.data_selections.set(visualKey, vis.data_map.get(key).length);
       }
     });
+
+    if (vis.sortByValue) {
+      vis.data_selections = new Map([...vis.data_selections].sort((a,b) => b[1] - a[1]));
+    }
+
+    if (vis.maxBars && vis.maxBars > 0) {
+      const list = [...vis.data_selections.entries()];
+      const firstHalf = list.slice(0,vis.maxBars);
+      const secondHalf = list.slice(-vis.maxBars);
+      const otherTotal = d3.sum(secondHalf, d => d[1]);
+      vis.data_selections = new Map(firstHalf);
+      vis.data_selections.set("Other", otherTotal);
+    }
+    
     vis.colors = ["#8dd3c7","#bebada","#fb8072","#80b1d3","#fdb462","#b3de69","#fccde5","#d9d9d9","#bc80bd","#ccebc5","#ffed6f"];
 
     vis.width = vis.config.containerWidth - vis.config.margin.left - vis.config.margin.right;
@@ -111,12 +129,32 @@ class BarChart {
         .style('text-anchor','end')
         .attr("dx", "-.8em")
         .attr("dy", ".15em")
-        .attr("transform", "rotate(-15)");;
+        .attr("transform", "rotate(-40)");;
     vis.yAxisG.call(vis.yAxis);
+
+    // Y Axis label
+    let font_size = 12;
+    vis.svg.append("g")
+      .attr('transform', 'translate(' + (font_size + 2) + ', ' + (vis.config.margin.top + vis.height/2) + ')')
+      .append('text')
+      .attr('text-anchor', 'middle')
+      .attr('transform', 'rotate(-90)')
+      .text(vis.config.yLabel)
+      // These can be replaced by style if necessary
+      .attr('font-family', 'sans-serif')
+      .attr('font-size', font_size)
+    
+    // Title label
+    vis.svg.append("g")
+      .attr('transform', 'translate(' + (vis.config.margin.left + vis.width/2) + ', ' + (font_size + 2) + ')')
+      .append('text')
+      .attr('text-anchor', 'middle')
+      .text(vis.config.title)
+      // These can be replaced by style if necessary
+      .attr('font-family', 'sans-serif')
+      .attr('font-size', font_size)
+      
   }
-  
-  
-  
     
 }
 

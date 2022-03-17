@@ -7,8 +7,10 @@ d3.csv('data/occurrences.csv')
 	  d.latitude = +d.decimalLatitude; //make sure these are not strings
 	  d.longitude = +d.decimalLongitude; //make sure these are not strings
 	  d.year = d.year != '' ? +d.year : null;
-    d.month = d.month.trim() != '' && d.month.trim() != '0' ? +d.month : null;
+    d.month = d.month.trim() != '' && d.month.trim() != '0' ? +d.month : '(Unknown)';
 	  d.startDayOfYear = d.startDayOfYear != '' ? +d.startDayOfYear : null;
+    d.class = d.class != '' ? d.class : '(Unknown)';
+    d.recordedBy = d.recordedBy != '' ? d.recordedBy : '(Unknown)';
 	  
 	  
     });
@@ -20,15 +22,21 @@ d3.csv('data/occurrences.csv')
 
     const myBar1 = new BarChart({
       parentElement: 'bar1',
-    }, data, "month", 12, 'legend3');
+      title: 'Num. of Specimens Per Month of Year',
+      yLabel: 'Specimen Count',
+    }, data, "month", 0, false, 'legend3');
   
     const myBar2 = new BarChart({
       parentElement: 'bar2',
-    }, data, "class", 12, 'legend4');
+      title: 'Num. of Specimens Per Class',
+      yLabel: 'Specimen Count',
+    }, data, "class", 12, true, 'legend4');
 
     const myBar3 = new BarChart({
       parentElement: 'bar3',
-    }, data, "recordedBy", 12, 'legend5');
+      title: 'Num. of Specimens Collected Per Contributor',
+      yLabel: 'Specimen Count',
+    }, data, "recordedBy", 12, true, 'legend5');
 
 
   })
