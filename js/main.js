@@ -38,6 +38,17 @@ d3.csv('data/occurrences.csv')
       yLabel: 'Specimen Count',
     }, data, "recordedBy", 12, true, 'legend5');
 
+    timeData = getTimelineData(data);
+    timeline = new Timeline({
+      'parentElement': '#timeline',
+      'containerHeight': 250,
+      'containerWidth': 1500
+    }, timeData);
+
+
+    timeline.brush.on("end", function ({ selection }) {
+          if (selection) console.log(timeline.brushed(selection));
+        });
 
   })
   .catch(error => console.error(error));
@@ -46,4 +57,21 @@ function updateColor(scale)
 {
 	leafletMap.colorType = scale;
 	leafletMap.updateVis();
+}
+
+function getTimelineData(data) {
+    let timeData = new Array(159);
+    for (let i=0; i < timeData.length; i++){
+      timeData[i] = {"year": 1859 + i, "count": 0};
+    }
+
+    data.forEach(d=>{
+      timeData[d.year - 1859].count = timeData[d.year - 1859].count + 1;
+    });
+    console.log(timeData);
+    return (timeData);
+}
+
+function resetTimeline(){
+    timeline.updateVis();
 }
