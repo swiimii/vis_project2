@@ -45,10 +45,13 @@ d3.csv('data/occurrences.csv')
       'containerWidth': 1500
     }, timeData);
 
-
     timeline.brush.on("end", function ({ selection }) {
-          if (selection) console.log(timeline.brushed(selection));
+          if (selection) { 
+            brushedYrs = timeline.brushed(selection);
+            filteredData = data.filter(function(d) {return(d.year >= brushedYrs[0] && d.year <= brushedYrs[1])});
+          }
         });
+
 
   })
   .catch(error => console.error(error));
@@ -60,7 +63,7 @@ function updateColor(scale)
 }
 
 function getTimelineData(data) {
-    let timeData = new Array(159);
+  let timeData = new Array(159);
     for (let i=0; i < timeData.length; i++){
       timeData[i] = {"year": 1859 + i, "count": 0};
     }
@@ -73,5 +76,5 @@ function getTimelineData(data) {
 }
 
 function resetTimeline(){
-    timeline.updateVis();
+  timeline.updateVis();
 }
