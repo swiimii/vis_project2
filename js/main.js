@@ -1,5 +1,5 @@
-
-
+let allData;
+let filteredData;
 
 d3.csv('data/occurrences.csv')
 .then(data => {
@@ -16,6 +16,9 @@ d3.csv('data/occurrences.csv')
     });
 
     console.log(data);//ok, got my data!
+
+    //This is inefficient but I'm not sure what else to do please help
+    allData = data;
 
     // Initialize chart and then show it
     leafletMap = new LeafletMap({ parentElement: '#my-map'}, data);
@@ -45,14 +48,25 @@ d3.csv('data/occurrences.csv')
       'containerWidth': 1500
     }, timeData);
 
+    missingData = new stackedBar({
+      'parentElement': '#stacked-bar',
+      'containerHeight': 300,
+      'containerWidth': 300
+    }, data);
+
     timeline.brush.on("end", function ({ selection }) {
           if (selection) { 
             brushedYrs = timeline.brushed(selection);
             filteredData = data.filter(function(d) {return(d.year >= brushedYrs[0] && d.year <= brushedYrs[1])});
+
+            //Should probably get moved to a function
+            missingData.data = filteredData;
+            missingData.updateVis();
+
           }
         });
 
-
+    
   })
   .catch(error => console.error(error));
 
@@ -77,4 +91,6 @@ function getTimelineData(data) {
 
 function resetTimeline(){
   timeline.updateVis();
+  missingData.data = allData;
+  missingData.updateVis();
 }
