@@ -19,6 +19,10 @@ class LeafletMap {
   initVis() {
     let vis = this;
 
+	vis.svg = d3.select(vis.config.parentElement).append('svg')
+		.attr('width', 1600)
+		.attr('height', 400);
+	
     //ESRI
     vis.esriUrl = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
     vis.esriAttr = 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community';
@@ -69,7 +73,6 @@ class LeafletMap {
 	
 	L.control.layers(vis.basemaps).addTo(vis.theMap);
 	
-	console.log(d3.extent(vis.data, d => d.year));
 	vis.colorType = 'year'; //this is used to determine how to color the map using the different color scales
 	vis.colorScaleYear = d3.scaleSequential()
 		.interpolator(d3.interpolateViridis)
@@ -83,14 +86,25 @@ class LeafletMap {
 		.domain(new Set(vis.data.map(d => d.phylum)))
 		.range(d3.schemeAccent);
 
-    //if you stopped here, you would just have a map
+
+	//legend stuff
+	vis.svg.append("g")
+		.attr('class', 'legend')
+		.attr('transform', 'translate(1300,20)');
+	
+	vis.legendClass = d3.legendColor()
+		.shape("path", d3.symbol().type(d3.symbolCircle).size(150))
+		.shapePadding(10)
+		.scale(vis.colorScaleClass);
+		
+	vis.svg.select('.legend')
+		.call(vis.legendClass);
 
     //initialize svg for d3 to add to map
     L.svg({clickable:true}).addTo(vis.theMap)// we have to make the svg layer clickable
     vis.overlay = d3.select(vis.theMap.getPanes().overlayPane)
     vis.svg = vis.overlay.select('svg').attr("pointer-events", "auto")
 
-    //these are the city locations, displayed as a set of dots 
     vis.Dots = vis.svg.selectAll('circle')
                     .data(vis.data) 
                     .join('circle')
@@ -172,6 +186,7 @@ class LeafletMap {
                            // vis.theMap.flyTo([d.latitude, d.longitude], vis.newZoom);
                           });
     
+	
     //handler here for updating the map, as you zoom in and out           
     vis.theMap.on("zoomend", function(){
       vis.updateVis();
@@ -216,6 +231,7 @@ class LeafletMap {
 						console.log('the fuck you doing');
 				}
 				});
+			
 
 	}
 
