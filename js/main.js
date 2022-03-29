@@ -62,6 +62,7 @@ d3.csv('data/occurrences.csv')
             //Should probably get moved to a function
             missingData.data = filteredData;
             missingData.updateVis();
+            UpdateBarCharts(filteredData);
 
           }
         });
@@ -93,4 +94,5 @@ function resetTimeline(){
   timeline.updateVis();
   missingData.data = allData;
   missingData.updateVis();
+  UpdateBarCharts();
 }
