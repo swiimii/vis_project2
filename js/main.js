@@ -21,7 +21,7 @@ d3.csv('data/occurrences.csv')
     allData = data;
 
     // Initialize chart and then show it
-    leafletMap = new LeafletMap({ parentElement: '#my-map'}, data);
+    leafletMap = new LeafletMap({ parentElement: '#my-map', legendElement: '#map-legend' }, data);
 
     const myBar1 = new BarChart({
       parentElement: 'bar1',
