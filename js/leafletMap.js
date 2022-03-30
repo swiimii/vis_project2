@@ -8,6 +8,7 @@ class LeafletMap {
   constructor(_config, _data) {
     this.config = {
       parentElement: _config.parentElement,
+	  legendElement: _config.legendElement,
     }
     this.data = _data;
     this.initVis();
@@ -19,7 +20,7 @@ class LeafletMap {
   initVis() {
     let vis = this;
 
-	vis.svg = d3.select(vis.config.parentElement).append('svg')
+	vis.svg2 = d3.select(vis.config.legendElement).append('svg')
 		.attr('width', 1600)
 		.attr('height', 400);
 	
@@ -87,18 +88,6 @@ class LeafletMap {
 		.range(d3.schemeAccent);
 
 
-	//legend stuff
-	vis.svg.append("g")
-		.attr('class', 'legend')
-		.attr('transform', 'translate(1300,20)');
-	
-	vis.legendClass = d3.legendColor()
-		.shape("path", d3.symbol().type(d3.symbolCircle).size(150))
-		.shapePadding(10)
-		.scale(vis.colorScaleClass);
-		
-	vis.svg.select('.legend')
-		.call(vis.legendClass);
 
     //initialize svg for d3 to add to map
     L.svg({clickable:true}).addTo(vis.theMap)// we have to make the svg layer clickable
@@ -186,11 +175,45 @@ class LeafletMap {
                            // vis.theMap.flyTo([d.latitude, d.longitude], vis.newZoom);
                           });
     
+	//legend stuff
+	vis.svg2.append("g")
+		.attr('class', 'legend')
+		.attr('transform', 'translate(1100,20)');
 	
+	vis.legendClass = d3.legendColor()
+		.title('Legend')
+		.shape("path", d3.symbol().type(d3.symbolCircle).size(150))
+		.shapePadding(10)
+		.scale(vis.colorScaleClass)
+		.cellFilter(function(d){ return d.label !== '' });
+		
+	vis.svg2.select('.legend')
+		.call(vis.legendClass);
+
     //handler here for updating the map, as you zoom in and out           
     vis.theMap.on("zoomend", function(){
       vis.updateVis();
     });
+	
+	//brush stuff
+	
+	document.addEventListener('mousedown', (e) => {
+		if (e.button == 2) {vis.theMap.dragging.disable();}
+		}
+	);
+
+	document.addEventListener('mouseup', (e) => {
+		if (e.button == 2)	{ vis.theMap.dragging.enable(); }
+		}
+	);
+	
+	vis.brush = d3.brush()
+		.filter(function filter(event) {
+			return !event.ctrlKey;
+		});
+	vis.svg.append('g')
+		.attr('class', 'brush')
+		.call(vis.brush);
 	
 
   }
@@ -211,6 +234,7 @@ class LeafletMap {
    
    //redraw based on new zoom- need to recalculate on-screen position
 	vis.Dots
+		.data(vis.data)
 		.join('circle')
 		  .attr("cx", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).x)
 		  .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).y)
