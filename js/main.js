@@ -54,12 +54,6 @@ d3.csv('data/occurrences.csv')
       'containerWidth': 300
     }, data);
 
-    tree = new Tree({
-      'parentElement':'tree',
-      'containerHeight':800,
-      'containerWidth':600,
-    }, data)
-
     timeline.brush.on("end", function ({ selection }) {
           if (selection) { 
             brushedYrs = timeline.brushed(selection);
@@ -76,6 +70,12 @@ d3.csv('data/occurrences.csv')
     
   })
   .catch(error => console.error(error));
+
+  tree = new Tree({
+    'parentElement':'tree',
+    'containerHeight':800,
+    'containerWidth':600,
+  }, data);
 
 function updateColor(scale)
 {
