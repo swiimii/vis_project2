@@ -158,7 +158,10 @@ class BarChart {
         .attr('y', d => vis.yScale(vis.data_selections.get(d)))
         .attr('height', d => vis.height - vis.yScale(vis.data_selections.get(d)))
         .attr('width', vis.xScale.bandwidth())
-        .attr('fill', d => vis.barColor(d));
+        .attr('fill', d => vis.barColor(d))
+        .on('click', (event, d) => {
+          console.log(d);
+        });
 
     // Update the axes
     vis.xAxisG.call(vis.xAxis)
