@@ -35,23 +35,24 @@ class Tree {
       vis.chart = vis.svg.append('g')
           .attr('transform', `translate(${vis.config.margin.left},${vis.config.margin.top})`);
   
-      // Title label
-      vis.svg.append("g")
-        .attr('transform', 'translate(' + (vis.config.margin.left + vis.width/2) + ', ' + (font_size + 2) + ')')
-        .append('text')
-        .attr('text-anchor', 'middle')
-        .text(vis.config.title)
-        // These can be replaced by style if necessary
-        .attr('font-family', 'sans-serif')
-        .attr('font-size', font_size)
+      // // Title label
+      // vis.svg.append("g")
+      //   .attr('transform', 'translate(' + (vis.config.margin.left + vis.width/2) + ', ' + (font_size + 2) + ')')
+      //   .append('text')
+      //   .attr('text-anchor', 'middle')
+      //   .text(vis.config.title)
+      //   // These can be replaced by style if necessary
+      //   .attr('font-family', 'sans-serif')
+      //   .attr('font-size', font_size)
 			
 			// define stratify helper function
 			vis.stratify = d3.stratify()
-				.parentId(function(d) { return d.id.substring(0, d.id.lastIndexOf("|")); });
+				.id((d) => {return d.phylum})
+				.parentId((d) => {return d.kingdom});
       
       vis.updateVis();
     }
-  
+
     /**
      * Prepare the data and scales before we render it.
      */
@@ -61,11 +62,20 @@ class Tree {
 				filteredData = vis.data;
 			}
 
-			var root = vis.stratify(vis.data)
+			let groupedData = d3.group(filteredData, d => d.kingdom);
+			let life = new Array();
+			console.log(groupedData);
+			life.push('','life','')
+			Array.from(groupedData.keys()).forEach(parentName => {
+				if (parentName != '') {
+					life.push(['life',parentName,groupedData.get(parentName).length]);
+				}
+			});
+			var root = vis.stratify(groupedData)
 				.sum(function(d) { return d.value; })
 				.sort(function(a, b) { return b.height - a.height || b.value - a.value; });
 
-			
+
     	// process data
 
   
