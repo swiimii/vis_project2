@@ -18,7 +18,22 @@
   font-size: 10px;
   color: #888;
 }
+.wrapper {
+  margin: 1rem;
+  padding: 2rem 2rem;
+  position:relative;
+}
+.map {
+  padding: 1rem 1rem;
+  position: absolute;
+}
+
+.item1 {
+	position:relative;
+	top: 550px;
+}
+
 .aligned-section {
-  display: flex;
-  align-items: center;
+	position: absolute;
+	top: 980px;
 }
