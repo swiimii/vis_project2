@@ -128,7 +128,7 @@ class LeafletMap {
 
                             //create a tool tip
                             d3.select('#tooltip')
-                                .style('opacity', 1)
+                                .style('display', 'block')
                                 .style('z-index', 1000000)
                                   // Format number with million and thousand separator
                                 .html(`<div class="tooltip-label"><l> Collector: ${d.recordedBy}</l><br>
@@ -165,10 +165,12 @@ class LeafletMap {
 									})
                               .attr('r', 3) //change radius
 
-                            d3.select('#tooltip').style('opacity', 0);//turn off the tooltip
+                            d3.select('#tooltip').style('display', 'none');//turn off the tooltip
 
                           })
-                        .on('click', (event, d) => { //experimental feature I was trying- click on point and then fly to it
+                        .on('click', (event, d) => { 
+                        		window.open(d.references);
+                        //experimental feature I was trying- click on point and then fly to it
                            // vis.newZoom = vis.theMap.getZoom()+2;
                            // if( vis.newZoom > 18)
                            //  vis.newZoom = 18; 
