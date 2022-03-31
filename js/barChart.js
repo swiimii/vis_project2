@@ -159,6 +159,18 @@ class BarChart {
         .attr('height', d => vis.height - vis.yScale(vis.data_selections.get(d)))
         .attr('width', vis.xScale.bandwidth())
         .attr('fill', d => vis.barColor(d))
+        .on('mouseover', (event,d) => {
+          console.log(d);
+          d3.select('#tooltip')
+              .style('display', 'block')
+              .style('left', (event.pageX + 10) + 'px')   
+              .style('top', (event.pageY + 10) + 'px')
+              .html(`<div class="tooltip">${vis.data_selection} Data</div>
+                  <li>${d}: ${vis.data_selections.get(d)}</li>`);
+        })
+        .on('mouseleave', () => {
+          d3.select('#tooltip').style('display', 'none');
+        })
         .on('click', (_event, d) => {
           let filterSelection = Array.from(monthToNumber.keys()).includes(d) ? monthToNumber.get(d) : d;
           let newData = null;
