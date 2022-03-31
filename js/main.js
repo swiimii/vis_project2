@@ -101,6 +101,8 @@ function UpdateAllCharts(data = null) {
   UpdateBarCharts(data);
   if (data != null) {
     
+  } else {
+
   }
 }
 

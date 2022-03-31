@@ -115,8 +115,8 @@ class BarChart {
     (Array.from(vis.data_map.keys()).sort(d3.ascending)).forEach((key) => {
       if (key != null) {
         let visualKey = key;
-        if (`${key}` in Array.from(months.keys())) {
-          visualKey = months.get(`${key}`);
+        if (`${key}` in Array.from(numberToMonth.keys())) {
+          visualKey = numberToMonth.get(`${key}`);
         }
         vis.data_selections.set(visualKey, vis.data_map.get(key).length);
       }
@@ -159,8 +159,10 @@ class BarChart {
         .attr('height', d => vis.height - vis.yScale(vis.data_selections.get(d)))
         .attr('width', vis.xScale.bandwidth())
         .attr('fill', d => vis.barColor(d))
-        .on('click', (event, d) => {
+        .on('click', (_event, d) => {
           console.log(d);
+          let newData = vis.filtered_data.filter((element) => element[vis.data_selection] == d || (d in monthToNumber.keys() && element[monthToNumber.get(vis.data_selection)]));
+          UpdateAllCharts(newData);
         });
 
     // Update the axes
@@ -181,7 +183,7 @@ function UpdateBarCharts(filteredData) {
   });
 }
 
-const months = new Map(Object.entries({
+const numberToMonth = new Map(Object.entries({
   1:"January",
   2:"February",
   3:"March",
@@ -195,4 +197,20 @@ const months = new Map(Object.entries({
   11:"November",
   12:"December",
   13:null
+}));
+
+const monthToNumber = new Map(Object.entries({
+  "January":1,
+  "February":2,
+  "March":3,
+  "April":4,
+  "May":5,
+  "June":6,
+  "July":7,
+  "August":8,
+  "September":9,
+  "October":10,
+  "November":11,
+  "December":12,
+  "null":13
 }));
