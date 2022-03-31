@@ -165,8 +165,8 @@ class BarChart {
               .style('display', 'block')
               .style('left', (event.pageX + 10) + 'px')   
               .style('top', (event.pageY + 10) + 'px')
-              .html(`<div class="tooltip">${vis.data_selection} Data</div>
-                  <li>${d}: ${vis.data_selections.get(d)}</li>`);
+              .html(`<div class="tooltip">Count for ${d}: </div>
+                  <li>${vis.data_selections.get(d)}</li>`);
         })
         .on('mouseleave', () => {
           d3.select('#tooltip').style('display', 'none');
