@@ -160,8 +160,13 @@ class BarChart {
         .attr('width', vis.xScale.bandwidth())
         .attr('fill', d => vis.barColor(d))
         .on('click', (_event, d) => {
-          console.log(d);
-          let newData = vis.filtered_data.filter((element) => element[vis.data_selection] == d || (d in monthToNumber.keys() && element[monthToNumber.get(vis.data_selection)]));
+          let filterSelection = Array.from(monthToNumber.keys()).includes(d) ? monthToNumber.get(d) : d;
+          let newData = null;
+          if (filterSelection == 'Other') {
+            newData = vis.filtered_data.filter((element) => !Array.from(vis.data_selections.keys()).includes(element[vis.data_selection]));
+          } else {
+            newData = vis.filtered_data.filter((element) => element[vis.data_selection] == filterSelection );
+          }
           UpdateAllCharts(newData);
         });
 
