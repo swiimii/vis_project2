@@ -77,7 +77,7 @@ d3.csv('data/occurrences.csv')
   })
   .catch(error => console.error(error));
 
-
+  
 function updateColor(scale)
 {
 	leafletMap.colorType = scale;
@@ -106,10 +106,11 @@ function resetTimeline(){
 
 function UpdateAllCharts(data = null) {
   UpdateBarCharts(data);
-  if (data != null) {
-    
-  } else {
+  if (data == null) {
+    data = allData
+  } 
+  missingData.data = data;
+  missingData.updateVis();
 
-  }
 }
 
