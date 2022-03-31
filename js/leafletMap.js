@@ -21,7 +21,7 @@ class LeafletMap {
     let vis = this;
 
 	vis.svg2 = d3.select(vis.config.legendElement).append('svg')
-		.attr('width', 1600)
+		.attr('width', 500)
 		.attr('height', 400);
 	
     //ESRI
@@ -180,7 +180,7 @@ class LeafletMap {
 	//legend stuff
 	vis.svg2.append("g")
 		.attr('class', 'legend')
-		.attr('transform', 'translate(1100,20)');
+		.attr('transform', 'translate(0,20)');
 	
 	vis.legendClass = d3.legendColor()
 		.title('Legend')
