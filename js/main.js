@@ -54,6 +54,12 @@ d3.csv('data/occurrences.csv')
       'containerWidth': 300
     }, data);
 
+    tree = new Tree({
+      'parentElement':'#tree',
+      'containerHeight':800,
+      'containerWidth':800
+    }, data);
+
     timeline.brush.on("end", function ({ selection }) {
           if (selection) { 
             brushedYrs = timeline.brushed(selection);
@@ -62,6 +68,7 @@ d3.csv('data/occurrences.csv')
             //Should probably get moved to a function
             missingData.data = filteredData;
             missingData.updateVis();
+            UpdateBarCharts(filteredData);
 
           }
         });
@@ -70,6 +77,7 @@ d3.csv('data/occurrences.csv')
   })
   .catch(error => console.error(error));
 
+  
 function updateColor(scale)
 {
 	leafletMap.colorType = scale;
@@ -93,4 +101,18 @@ function resetTimeline(){
   timeline.updateVis();
   missingData.data = allData;
   missingData.updateVis();
+  UpdateBarCharts();
 }
+
+function UpdateAllCharts(data = null) {
+  UpdateBarCharts(data);
+  if (data == null) {
+    data = allData
+  } 
+  missingData.data = data;
+  missingData.updateVis();
+  leafletMap.data = data;
+  leafletMao.updateVis();
+
+}
+
