@@ -98,7 +98,7 @@ class Timeline {
     console.log(d3.max(vis.data.map(o => o.count)));
 
     vis.yScale.domain([0, d3.max(vis.data.map(o => o.count))]);
-    vis.chart.selectAll(".yAxis").call(vis.yAxisG);
+    vis.chart.selectAll(".yAxis").transition().duration(1000).call(vis.yAxisG);
 
   	vis.rects = vis.chart.selectAll(".bar")
   		.data(vis.data)

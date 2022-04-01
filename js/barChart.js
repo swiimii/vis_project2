@@ -65,7 +65,7 @@ class BarChart {
 
     // Append y-axis group
     vis.yAxisG = vis.chart.append('g')
-        .attr('class', 'axis y-axis');
+        .attr('class', 'y-axis');
 
     // Y Axis label
     let font_size = 12;
@@ -191,7 +191,7 @@ class BarChart {
         .attr("dx", "-.8em")
         .attr("dy", ".15em")
         .attr("transform", "rotate(-40)");;
-    vis.yAxisG.call(vis.yAxis);
+    vis.yAxisG.transition().duration(1000).call(vis.yAxis);
 
   }
 }
