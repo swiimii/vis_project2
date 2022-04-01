@@ -6,7 +6,7 @@ class Tree {
         parentElement: _config.parentElement,
         containerWidth: _config.containerWidth || 800,
         containerHeight: _config.containerHeight || 800,
-        margin: { top: 0, bottom: 0, right: 0, left: 0 }
+        margin: { top: 50, bottom: 0, right: 0, left: 0 }
       }
   
       this.data = _data;
@@ -180,11 +180,24 @@ class Tree {
       root.sum(function(d) { return d.value });
 
       d3.treemap()
-        .size([800, 800])
-        .padding(4)
+        .size([vis.width, vis.height])
+        .padding(2)
         (root)
 
       console.log(root);
+
+
+      if (!parent_el) {
+        vis.path = "";
+      }
+      
+      vis.svg.append("g")
+        .append("text")
+          .attr("class", "title")
+          .attr("x", 10)
+          .attr("y", 10) 
+          .attr("font-size", "12px")
+          .text(vis.path)
     
       vis.rects = vis.chart.selectAll(".rects")
         .data(root.leaves())
@@ -194,8 +207,8 @@ class Tree {
           .attr('y', function (d) { return d.y0; })
           .attr('width', function (d) { return d.x1 - d.x0; })
           .attr('height', function (d) { return d.y1 - d.y0; })
-          //.style("stroke", "black")
-          .style("fill", "#69b3a2");
+          .attr("fill", function(d,i) {return(vis.colors[i%11])});
+
 
       vis.labels = vis.chart.selectAll(".labels")
         .data(root.leaves())
@@ -203,17 +216,41 @@ class Tree {
           .attr("class", "labels")
           .attr("x", function(d){ return d.x0+10})    // +10 to adjust position (more right)
           .attr("y", function(d){ return d.y0+20})    // +20 to adjust position (lower)
-          .text(function(d){ return (d.data.child + ": " + d.data.value + " samples")})
-          .attr("font-size", "15px")
+          .text(function(d){ 
+            var string = d.data.child + ": " + d.data.value + " samples";
+            if ((d.x1 - d.x0 < string.length * 8) || (d.y1 - d.y0 < 12)) {
+              string = "";
+            }
+            return (string);})
+          .style("maxWidth", function (d) { return d.x1 - d.x0; })
+          .style("overflow", "hidden")
+          .attr("font-size", "12px")
           .attr("fill", "white")
 
 
-      vis.rects.on('click',(event,clicked_d) => {
-        console.log(clicked_d);
-        filteredData = filteredData.filter(function(d) {return(d[hierarchy[child_el]] == clicked_d.data.child)});
-        console.log(filteredData);
-        vis.updateVis(filteredData, child_el, child_el+1);
-      })
+      vis.rects
+        .on('click',(event,clicked_d) => {
+          if (child_el < 7) {
+            console.log(clicked_d);
+            filteredData = filteredData.filter(function(d) {return(d[hierarchy[child_el]] == clicked_d.data.child)});
+            vis.path  = vis.path + clicked_d.data.child + " ->\n ";
+            console.log(vis.path);
+            console.log(filteredData);
+            vis.updateVis(filteredData, child_el, child_el+1);
+          }
+        })
+        .on('mousemove', (event,d) => {
+          console.log(d);
+          d3.select('#tooltip')
+              .style('display', 'block')
+              .style('left', (event.pageX + 10) + 'px')   
+              .style('top', (event.pageY + 10) + 'px')
+              .html(`<div class="tooltip"><strong>${d.data.child}</strong> - ${d.data.value} samples</div>`);
+          })
+        .on('mouseleave', () => {
+          d3.select('#tooltip').style('display', 'none');
+        }); 
+
 
 
 
