@@ -102,6 +102,9 @@ function resetTimeline(){
   missingData.data = allData;
   missingData.updateVis();
   UpdateBarCharts();
+  timeline.data = getTimelineData(allData);
+  timeline.updateVis();
+
 }
 
 function UpdateAllCharts(data = null) {
