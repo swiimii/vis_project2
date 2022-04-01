@@ -7,17 +7,22 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-	<p><l> Map Color Options: </l>
-	<button onclick="updateColor('year')">Year</button>
-	<button onclick="updateColor('SD')">Time Into Year</button>
-	<button onclick="updateColor('class')">Phylum</button>
-	</p>
+	
 	
 	<body oncontextmenu="return false;">
+        <p><l> Map Color Options: </l>
+        <button onclick="updateColor('year')">Year</button>
+        <button onclick="updateColor('SD')">Time Into Year</button>
+        <button onclick="updateColor('class')">Phylum</button>
+        </p>
 		<div class="wrapper">
-			<div id="my-map" class="map"></div>
-			<div id="map-legend" class="map"></div>
+			<div id="my-map" class="map">
+                <div id="map-legend" class="map-legend"></div>
+            </div>
+			<!-- Create a div where the graph will take place -->
+            <svg id="tree"></svg>
 		</div>
+        
 	</body>
 	
     <div class="item1">
@@ -40,8 +45,7 @@
     </div>
 
     <div>
-        <!-- Create a div where the graph will take place -->
-        <svg id="tree"></svg>
+        
     </div>
 
 

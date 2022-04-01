@@ -21,8 +21,9 @@ class LeafletMap {
     let vis = this;
 
 	vis.svg2 = d3.select(vis.config.legendElement).append('svg')
-		.attr('width', 500)
-		.attr('height', 400);
+		.attr('width', 150)
+		.attr('height', 250)
+		.style('background', 'white');
 	
     //ESRI
     vis.esriUrl = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
@@ -187,7 +188,7 @@ class LeafletMap {
 	//legend stuff
 	vis.svg2.append("g")
 		.attr('class', 'legend')
-		.attr('transform', 'translate(0,20)');
+		.attr('transform', 'translate(10,20)');
 	
 	vis.legendClass = d3.legendColor()
 		.title('Legend')

@@ -45,7 +45,7 @@ d3.csv('data/occurrences.csv')
     timeline = new Timeline({
       'parentElement': '#timeline',
       'containerHeight': 250,
-      'containerWidth': 1500
+      'containerWidth': 1600
     }, timeData);
 
     missingData = new stackedBar({
@@ -56,7 +56,7 @@ d3.csv('data/occurrences.csv')
 
     tree = new Tree({
       'parentElement':'#tree',
-      'containerHeight':800,
+      'containerHeight':400,
       'containerWidth':800
     }, data);
 
