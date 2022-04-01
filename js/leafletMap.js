@@ -194,7 +194,7 @@ class LeafletMap {
 		.attr('transform', 'translate(10,20)');
 	
 	vis.legendClass = d3.legendColor()
-		.title('Legend')
+		.title('Legend: year')
 		.shape("path", d3.symbol().type(d3.symbolCircle).size(150))
 		.shapePadding(10)
 		.scale(vis.currentColorScale)
