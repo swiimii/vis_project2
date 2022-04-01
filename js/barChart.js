@@ -28,10 +28,10 @@ class BarChart {
     // Call a class function
     this.initVis();
   }
-  
+
   initVis() {
     let vis = this;
-    
+
     vis.colors = ["#8dd3c7","#bebada","#fb8072","#80b1d3","#fdb462","#b3de69","#fccde5","#d9d9d9","#bc80bd","#ccebc5","#ffed6f"];
 
     vis.width = vis.config.containerWidth - vis.config.margin.left - vis.config.margin.right;
@@ -78,7 +78,7 @@ class BarChart {
       // These can be replaced by style if necessary
       .attr('font-family', 'sans-serif')
       .attr('font-size', font_size)
-    
+
     // Title label
     vis.svg.append("g")
       .attr('transform', 'translate(' + (vis.config.margin.left + vis.width/2) + ', ' + (font_size + 2) + ')')
@@ -88,7 +88,7 @@ class BarChart {
       // These can be replaced by style if necessary
       .attr('font-family', 'sans-serif')
       .attr('font-size', font_size)
-    
+
     vis.updateVis();
   }
 
@@ -97,7 +97,7 @@ class BarChart {
    */
   updateVis(filteredData = null) {
     let vis = this;
-    
+
     if (filteredData) {
       vis.filtered_data = filteredData;
     } else {
@@ -110,13 +110,13 @@ class BarChart {
     vis.data_map = d3.group(vis.filtered_data, d => d[vis.data_selection]);
 
     vis.data_selections = new Map();
-    
+
     // If a number set to a month name
     (Array.from(vis.data_map.keys()).sort(d3.ascending)).forEach((key) => {
       if (key != null) {
         let visualKey = key;
-        if (`${key}` in Array.from(months.keys())) {
-          visualKey = months.get(`${key}`);
+        if (`${key}` in Array.from(numberToMonth.keys())) {
+          visualKey = numberToMonth.get(`${key}`);
         }
         vis.data_selections.set(visualKey, vis.data_map.get(key).length);
       }
@@ -129,7 +129,7 @@ class BarChart {
     if (vis.maxBars && vis.maxBars > 0 && vis.data_selections.size > vis.maxBars) {
       const list = [...vis.data_selections.entries()];
       const firstHalf = list.slice(0,vis.maxBars);
-      const secondHalf = list.slice(-vis.maxBars);
+      const secondHalf = list.slice(vis.maxBars);
       const otherTotal = d3.sum(secondHalf, d => d[1]);
       vis.data_selections = new Map(firstHalf);
       vis.data_selections.set("Other", otherTotal);
@@ -158,7 +158,29 @@ class BarChart {
         .attr('y', d => vis.yScale(vis.data_selections.get(d)))
         .attr('height', d => vis.height - vis.yScale(vis.data_selections.get(d)))
         .attr('width', vis.xScale.bandwidth())
-        .attr('fill', d => vis.barColor(d));
+        .attr('fill', d => vis.barColor(d))
+        .on('mouseover', (event,d) => {
+          console.log(d);
+          d3.select('#tooltip')
+              .style('display', 'block')
+              .style('left', (event.pageX + 10) + 'px')   
+              .style('top', (event.pageY + 10) + 'px')
+              .html(`<div class="tooltip">Count for ${d}: </div>
+                  <li>${vis.data_selections.get(d)}</li>`);
+        })
+        .on('mouseleave', () => {
+          d3.select('#tooltip').style('display', 'none');
+        })
+        .on('click', (_event, d) => {
+          let filterSelection = Array.from(monthToNumber.keys()).includes(d) ? monthToNumber.get(d) : d;
+          let newData = null;
+          if (filterSelection == 'Other') {
+            newData = vis.filtered_data.filter((element) => !(Array.from(vis.data_selections.keys()).includes(element[vis.data_selection])));
+          } else {
+            newData = vis.filtered_data.filter((element) => element[vis.data_selection] == filterSelection );
+          }
+          UpdateAllCharts(newData);
+        });
 
     // Update the axes
     vis.xAxisG.call(vis.xAxis)
@@ -178,7 +200,7 @@ function UpdateBarCharts(filteredData) {
   });
 }
 
-const months = new Map(Object.entries({
+const numberToMonth = new Map(Object.entries({
   1:"January",
   2:"February",
   3:"March",
@@ -192,4 +214,20 @@ const months = new Map(Object.entries({
   11:"November",
   12:"December",
   13:null
+}));
+
+const monthToNumber = new Map(Object.entries({
+  "January":1,
+  "February":2,
+  "March":3,
+  "April":4,
+  "May":5,
+  "June":6,
+  "July":7,
+  "August":8,
+  "September":9,
+  "October":10,
+  "November":11,
+  "December":12,
+  "null":13
 }));
