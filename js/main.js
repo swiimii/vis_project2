@@ -111,6 +111,8 @@ function UpdateAllCharts(data = null) {
   } 
   missingData.data = data;
   missingData.updateVis();
+  timeline.data = getTimelineData(data);
+  timeline.updateVis();
 
 }
 
