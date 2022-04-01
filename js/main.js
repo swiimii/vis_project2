@@ -104,6 +104,8 @@ function resetTimeline(){
   UpdateBarCharts();
   timeline.data = getTimelineData(allData);
   timeline.updateVis();
+  leafletMap.data = allData;
+  leafletMap.updateVis();
 
 }
 
