@@ -56,7 +56,7 @@ class Tree {
     /**
      * Prepare the data and scales before we render it.
      */
-    updateVis(filteredData, parent_el, child_el) {
+updateVis(filteredData, parent_el, child_el) {
       let vis = this;
 
       let all_data = [{parent: '', child: 'life', value: null}];
@@ -110,7 +110,7 @@ class Tree {
 
 
 
-    	// process data
+      // process data
 
   
       //vis.renderVis();
@@ -151,3 +151,81 @@ function formatData(filteredData, parent_el, child_el, all_data) {
     return(all_data);
 }
 const hierarchy = ['life', 'kingdom', 'phylum', 'class', 'order', 'family', 'genus', 'scientificName'];
+
+
+
+// THIS SECTION WORKS RECURSIVELY
+//     updateVis(filteredData, parent_el, child_el) {
+//       let vis = this;
+
+//       let groupedData = d3.group(filteredData, d=>d[hierarchy[child_el]]);
+//       groupedData.delete('');
+//       console.log(groupedData);
+//       let life = Array.from({ length: groupedData.size + 1 } , () => ({ parent: hierarchy[parent_el], child: hierarchy[parent_el], value: null}));
+//       console.log(life);
+//       life[0].parent = '';
+//       let i = 1;
+//       for (const [key, value] of groupedData.entries()) {
+//         console.log(key, value);
+//         life[i].child = key;
+//         life[i].value = value.length;
+//         i++;
+//       };
+//       console.log(life);
+
+//       const root = d3.stratify()
+//         .id(function(d) { return d.child; })   // Name of the entity (column name is name in csv)
+//         .parentId(function(d) { return d.parent; })   // Name of the parent (column name is parent in csv)
+//         (life);
+//       root.sum(function(d) { return d.value });
+
+//       d3.treemap()
+//         .size([800, 800])
+//         .padding(4)
+//         (root)
+
+//       console.log(root);
+    
+//       vis.rects = vis.chart.selectAll(".rects")
+//         .data(root.leaves())
+//         .join("rect")
+//           .attr("class", "rects")
+//           .attr('x', function (d) { return d.x0; })
+//           .attr('y', function (d) { return d.y0; })
+//           .attr('width', function (d) { return d.x1 - d.x0; })
+//           .attr('height', function (d) { return d.y1 - d.y0; })
+//           //.style("stroke", "black")
+//           .style("fill", "#69b3a2");
+
+//       vis.labels = vis.chart.selectAll(".labels")
+//         .data(root.leaves())
+//         .join("text")
+//           .attr("class", "labels")
+//           .attr("x", function(d){ return d.x0+10})    // +10 to adjust position (more right)
+//           .attr("y", function(d){ return d.y0+20})    // +20 to adjust position (lower)
+//           .text(function(d){ return (d.data.child + ": " + d.data.value + " samples")})
+//           .attr("font-size", "15px")
+//           .attr("fill", "white")
+
+
+//       vis.rects.on('click',(event,clicked_d) => {
+//         console.log(clicked_d);
+//         filteredData = filteredData.filter(function(d) {return(d[hierarchy[child_el]] == clicked_d.data.child)});
+//         console.log(filteredData);
+//         vis.updateVis(filteredData, child_el, child_el+1);
+//       })
+
+
+
+//     	// process data
+
+  
+//       //vis.renderVis();
+//     }
+  
+//     renderVis() {
+//       let vis = this;
+  
+//     }
+//   }
+// const hierarchy = ['life', 'kingdom', 'phylum', 'class', 'order', 'family', 'genus', 'scientificName'];
