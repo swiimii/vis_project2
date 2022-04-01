@@ -55,7 +55,6 @@ class Timeline {
       .attr("class", "brush")
       .call(vis.brush);
 
-    vis.brushedData = vis.data;
 
     vis.svg.append("text")
       .attr("text-anchor", "start")
@@ -89,6 +88,8 @@ class Timeline {
   updateVis() {
   	let vis = this;
 
+    vis.brushedData = vis.data;
+    
   	vis.xScale.domain(vis.data.map(d=>d.year));
     vis.xAxisG.tickValues(vis.xScale.domain().filter(function(d,i){ return !((d)%5)}));
 
