@@ -111,8 +111,9 @@ function UpdateAllCharts(data = null) {
   } 
   missingData.data = data;
   missingData.updateVis();
+  timeline.data = getTimelineData(data);
+  timeline.updateVis();
   leafletMap.data = data;
-  leafletMao.updateVis();
+  leafletMap.updateVis();
 
 }
-
