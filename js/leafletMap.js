@@ -289,6 +289,7 @@ class LeafletMap {
 		  }
 	  });
 	  console.log(newData);
+	  updateAllCharts(newData);
 	  
   }
   

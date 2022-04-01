@@ -113,6 +113,7 @@ function UpdateAllCharts(data = null) {
   missingData.updateVis();
   timeline.data = getTimelineData(data);
   timeline.updateVis();
+  leafletMap.data = data;
+  leafletMap.updateVis();
 
 }
-
