@@ -19,6 +19,7 @@ d3.csv('data/occurrences.csv')
 
     //This is inefficient but I'm not sure what else to do please help
     allData = data;
+    filteredData = data;
 
     // Initialize chart and then show it
     leafletMap = new LeafletMap({ parentElement: '#my-map', legendElement: '#map-legend' }, data);
@@ -63,7 +64,7 @@ d3.csv('data/occurrences.csv')
     timeline.brush.on("end", function ({ selection }) {
           if (selection) { 
             brushedYrs = timeline.brushed(selection);
-            filteredData = data.filter(function(d) {return(d.year >= brushedYrs[0] && d.year <= brushedYrs[1])});
+            filteredData = filteredData.filter(function(d) {return(d.year >= brushedYrs[0] && d.year <= brushedYrs[1])});
 
             //Should probably get moved to a function
             missingData.data = filteredData;
@@ -109,6 +110,7 @@ function resetTimeline(){
   leafletMap.data = allData;
   leafletMap.updateVis();
   tree.updateVis(allData, 0, 1);
+  filteredData = allData;
 
 }
 
@@ -124,5 +126,6 @@ function UpdateAllCharts(data = null) {
   leafletMap.data = data;
   leafletMap.updateVis();
   tree.updateVis(data, 0, 1);
+  filteredData = data;
 
 }
