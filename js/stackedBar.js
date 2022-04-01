@@ -59,7 +59,8 @@ class stackedBar {
       .attr('transform', 'rotate(-90)')
       .text('Specimen Count')
       // These can be replaced by style if necessary
-      .attr('font-family', 'sans-serif')
+      //.attr('font-family', 'sans-serif')
+      .attr("font-weight", "bold")
       .attr('font-size', 12)
 
     vis.svg.append("g")
@@ -68,7 +69,8 @@ class stackedBar {
       .attr('text-anchor', 'middle')
       .text('Num. of Specimens Missing Data')
       // These can be replaced by style if necessary
-      .attr('font-family', 'sans-serif')
+      //.attr('font-family', 'sans-serif')
+      .attr("font-weight", "bold")
       .attr('font-size', 12)
 
     vis.svg.selectAll("legdots")
@@ -88,7 +90,7 @@ class stackedBar {
 		    .attr("y", vis.config.margin.top + vis.height + 30) // 100 is where the first dot appears. 25 is the distance between dots
 		    .style("fill", function(d){ return vis.color(d)})
 		    .text(function(d){ return d + ' data'})
-		    .attr('font-family', 'sans-serif')
+		    //.attr('font-family', 'sans-serif')
      		.attr('font-size', 12)
 		    .attr("text-anchor", "left")
 		    .style("alignment-baseline", "middle")
