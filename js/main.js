@@ -83,7 +83,7 @@ d3.csv('data/occurrences.csv')
 function updateColor(scale)
 {
 	leafletMap.colorType = scale;
-	leafletMap.updateVis();
+	leafletMap.updateVis(scale);
 }
 
 function getTimelineData(data) {

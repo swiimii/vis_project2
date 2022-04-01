@@ -11,6 +11,7 @@ class LeafletMap {
 	  legendElement: _config.legendElement,
     }
     this.data = _data;
+	this.currentColorScale = null;
     this.initVis();
   }
   
@@ -83,6 +84,7 @@ class LeafletMap {
 	L.control.layers(vis.basemaps).addTo(vis.theMap);
 	
 	vis.colorType = 'year'; //this is used to determine how to color the map using the different color scales
+	
 	vis.colorScaleYear = d3.scaleSequential()
 		.interpolator(d3.interpolateViridis)
 		.domain(d3.extent(vis.data, d => d.year));
@@ -95,6 +97,7 @@ class LeafletMap {
 		.domain(new Set(vis.data.map(d => d.phylum)))
 		.range(d3.schemeAccent);
 
+	vis.currentColorScale = vis.colorScaleYear;
 
 
     //initialize svg for d3 to add to map
@@ -111,7 +114,7 @@ class LeafletMap {
 								case 'year':
 									return vis.colorScaleYear(d.year);
 									break;
-								case 'SD':
+								case 'day of year':
 									return vis.colorScaleStartDay(d.startDayOfYear);
 									break;
 								case 'class':
@@ -161,7 +164,7 @@ class LeafletMap {
 										case 'year':
 											return vis.colorScaleYear(d.year);
 											break;
-										case 'SD':
+										case 'day of year':
 											return vis.colorScaleStartDay(d.startDayOfYear);
 											break;
 										case 'class':
@@ -194,7 +197,7 @@ class LeafletMap {
 		.title('Legend')
 		.shape("path", d3.symbol().type(d3.symbolCircle).size(150))
 		.shapePadding(10)
-		.scale(vis.colorScaleClass)
+		.scale(vis.currentColorScale)
 		.cellFilter(function(d){ return d.label !== '' });
 		
 	vis.svg2.select('.legend')
@@ -229,8 +232,36 @@ class LeafletMap {
 
   }
 
-  updateVis() {
+  updateVis(newColorScale = null) {
     let vis = this;
+
+	if (newColorScale != null) {
+		console.log(`Not equal to null! ${newColorScale}`);
+		if (newColorScale == 'year')
+		{
+			vis.currentColorScale = vis.colorScaleYear;
+		}
+		else if (newColorScale == 'day of year')
+		{
+			vis.currentColorScale = vis.colorScaleStartDay;
+		}
+		else if (newColorScale == 'class')
+		{
+			vis.currentColorScale = vis.colorScaleClass;
+		}
+		vis.svg2.select('.legend').remove();
+		vis.svg2.append("g")
+			.attr('class', 'legend')
+			.attr('transform', 'translate(10,20)');
+		vis.legendClass = d3.legendColor()
+			.title(`Legend: ${newColorScale}`)
+			.shape("path", d3.symbol().type(d3.symbolCircle).size(150))
+			.shapePadding(10)
+			.scale(vis.currentColorScale)
+			.cellFilter(function(d){ return d.label !== '' });
+		vis.svg2.select('.legend')
+			.call(vis.legendClass);
+	}
 
     //want to see how zoomed in you are? 
     // console.log(vis.map.getZoom()); //how zoomed am I
@@ -253,7 +284,7 @@ class LeafletMap {
 								case 'year':
 									return vis.colorScaleYear(d.year);
 									break;
-								case 'SD':
+								case 'day of year':
 									return vis.colorScaleStartDay(d.startDayOfYear);
 									break;
 								case 'class':
@@ -303,7 +334,7 @@ class LeafletMap {
 										case 'year':
 											return vis.colorScaleYear(d.year);
 											break;
-										case 'SD':
+										case 'day of year':
 											return vis.colorScaleStartDay(d.startDayOfYear);
 											break;
 										case 'class':
