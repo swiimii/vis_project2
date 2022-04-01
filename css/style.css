@@ -1,6 +1,6 @@
 #my-map {
-  width: 50%;
-  height: 500px;
+  width: 800px;
+  height: 400px;
   z-index: 1000;
 }
 #tooltip {

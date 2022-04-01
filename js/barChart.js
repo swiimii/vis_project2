@@ -6,7 +6,7 @@ class BarChart {
       title: _config.title || "Missing Title",
       yLabel: _config.yLabel || "Missing Axis Label",
       parentElement: _config.parentElement,
-      containerWidth: _config.containerWidth || 400,
+      containerWidth: _config.containerWidth || 450,
       containerHeight: _config.containerHeight || 300,
       margin: { top: 20, bottom: 100, right: 50, left: 70 }
     }
