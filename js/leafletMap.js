@@ -86,6 +86,7 @@ class LeafletMap {
 		.interpolator(d3.interpolateViridis)
 		.domain(d3.extent(vis.data, d => d.year));
 		
+		
 	vis.colorScaleStartDay = d3.scaleSequential()
 		.interpolator(d3.interpolateOranges)
 		.domain(d3.extent(vis.data, d => d.startDayOfYear));
@@ -114,7 +115,7 @@ class LeafletMap {
 									return vis.colorScaleStartDay(d.startDayOfYear);
 									break;
 								case 'class':
-									return vis.colorScaleClass(d.class);
+									return vis.colorScaleClass(d.phylum);
 									break;
 								default:
 									console.log('the fuck you doing');
@@ -164,7 +165,7 @@ class LeafletMap {
 											return vis.colorScaleStartDay(d.startDayOfYear);
 											break;
 										case 'class':
-											return vis.colorScaleClass(d.class);
+											return vis.colorScaleClass(d.phylum);
 											break;
 										default:
 											console.log('the fuck you doing');
@@ -191,39 +192,30 @@ class LeafletMap {
 	
 	vis.legendClass = d3.legendColor()
 		.title('Legend')
-		.shape("path", d3.symbol().type(d3.symbolCircle).size(150))
 		.shapePadding(10)
 		.scale(vis.colorScaleClass)
 		.cellFilter(function(d){ return d.label !== '' });
 		
+	vis.legendYear = d3.legendColor()
+		.title('Legend')
+		.cells(10)
+		.ascending(true)
+		.scale(vis.colorScaleYear);
+		
+	vis.legendStart = d3.legendColor()
+		.title('Legend')
+		.cells(10)
+		.ascending(true)
+		.scale(vis.colorScaleStartDay);
+		
 	vis.svg2.select('.legend')
-		.call(vis.legendClass);
+		.call(vis.legendYear);
 
     //handler here for updating the map, as you zoom in and out           
     vis.theMap.on("zoomend", function(){
       vis.updateVis();
     });
 	
-	//brush stuff
-	
-	/*document.addEventListener('mousedown', (e) => {
-		if (e.button == 2) {vis.theMap.dragging.disable();}
-		}
-	);
-
-	document.addEventListener('mouseup', (e) => {
-		if (e.button == 2)	{ vis.theMap.dragging.enable(); }
-		}
-	);
-	
-	vis.brush = d3.brush()
-		.filter(function filter(event) {
-			return !event.ctrlKey;
-		})
-		.on("end", vis.brushed);
-	vis.svg.append('g')
-		.attr('class', 'brush')
-		.call(vis.brush);*/
 	
 
   }
@@ -256,7 +248,7 @@ class LeafletMap {
 									return vis.colorScaleStartDay(d.startDayOfYear);
 									break;
 								case 'class':
-									return vis.colorScaleClass(d.class);
+									return vis.colorScaleClass(d.phylum);
 									break;
 								default:
 									console.log('the fuck you doing');
@@ -306,7 +298,7 @@ class LeafletMap {
 											return vis.colorScaleStartDay(d.startDayOfYear);
 											break;
 										case 'class':
-											return vis.colorScaleClass(d.class);
+											return vis.colorScaleClass(d.phylum);
 											break;
 										default:
 											console.log('the fuck you doing');
@@ -325,6 +317,26 @@ class LeafletMap {
                            //  vis.newZoom = 18; 
                            // vis.theMap.flyTo([d.latitude, d.longitude], vis.newZoom);
                           });
+						  
+						  
+		switch(vis.colorType)
+		{
+			case 'year':
+			vis.svg2.select('.legend')
+				.call(vis.legendYear);
+			break;
+			case 'SD':
+				vis.svg2.select('.legend')
+					.call(vis.legendStart);
+				break;
+			case 'class':
+				vis.svg2.select('.legend')
+					.call(vis.legendClass);
+				break;
+			default:
+				console.log('Why? Just why?');
+		}
+		
 			
 
 	}
