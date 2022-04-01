@@ -158,6 +158,8 @@ class Tree {
     updateVis(filteredData, parent_el, child_el) {
       let vis = this;
 
+      if (parent_el == 0) {vis.data = filteredData};
+
       let groupedData = d3.group(filteredData, d=>d[hierarchy[child_el]]);
       groupedData.delete('');
       console.log(groupedData);
@@ -213,6 +215,9 @@ class Tree {
               string = vis.path;
             }
             return (string);})
+          .on('click', (event,d) => {
+            vis.updateVis(vis.data, 0, 1);
+          })
     
       vis.rects = vis.chart.selectAll(".rects")
         .data(root.leaves())
