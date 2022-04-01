@@ -102,6 +102,9 @@ function resetTimeline(){
   missingData.data = allData;
   missingData.updateVis();
   UpdateBarCharts();
+  timeline.data = getTimelineData(allData);
+  timeline.updateVis();
+
 }
 
 function UpdateAllCharts(data = null) {
@@ -113,6 +116,7 @@ function UpdateAllCharts(data = null) {
   missingData.updateVis();
   timeline.data = getTimelineData(data);
   timeline.updateVis();
+  leafletMap.data = data;
+  leafletMap.updateVis();
 
 }
-
