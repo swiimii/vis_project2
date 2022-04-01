@@ -28,10 +28,10 @@ class BarChart {
     // Call a class function
     this.initVis();
   }
-  
+
   initVis() {
     let vis = this;
-    
+
     vis.colors = ["#8dd3c7","#bebada","#fb8072","#80b1d3","#fdb462","#b3de69","#fccde5","#d9d9d9","#bc80bd","#ccebc5","#ffed6f"];
 
     vis.width = vis.config.containerWidth - vis.config.margin.left - vis.config.margin.right;
@@ -78,7 +78,7 @@ class BarChart {
       // These can be replaced by style if necessary
       .attr('font-family', 'sans-serif')
       .attr('font-size', font_size)
-    
+
     // Title label
     vis.svg.append("g")
       .attr('transform', 'translate(' + (vis.config.margin.left + vis.width/2) + ', ' + (font_size + 2) + ')')
@@ -88,7 +88,7 @@ class BarChart {
       // These can be replaced by style if necessary
       .attr('font-family', 'sans-serif')
       .attr('font-size', font_size)
-    
+
     vis.updateVis();
   }
 
@@ -97,7 +97,7 @@ class BarChart {
    */
   updateVis(filteredData = null) {
     let vis = this;
-    
+
     if (filteredData) {
       vis.filtered_data = filteredData;
     } else {
@@ -110,7 +110,7 @@ class BarChart {
     vis.data_map = d3.group(vis.filtered_data, d => d[vis.data_selection]);
 
     vis.data_selections = new Map();
-    
+
     // If a number set to a month name
     (Array.from(vis.data_map.keys()).sort(d3.ascending)).forEach((key) => {
       if (key != null) {
