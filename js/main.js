@@ -69,6 +69,8 @@ d3.csv('data/occurrences.csv')
             //Should probably get moved to a function
             missingData.data = filteredData;
             missingData.updateVis();
+            leafletMap.data = filteredData;
+            leafletMap.updateVis();
             UpdateBarCharts(filteredData);
             leafletMap.data = filteredData;
             leafletMap.updateVis();
