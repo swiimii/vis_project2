@@ -8,6 +8,7 @@ class LeafletMap {
   constructor(_config, _data) {
     this.config = {
       parentElement: _config.parentElement,
+	  legendElement: _config.legendElement,
     }
     this.data = _data;
     this.initVis();
@@ -19,6 +20,10 @@ class LeafletMap {
   initVis() {
     let vis = this;
 
+	vis.svg2 = d3.select(vis.config.legendElement).append('svg')
+		.attr('width', 500)
+		.attr('height', 400);
+	
     //ESRI
     vis.esriUrl = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
     vis.esriAttr = 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community';
@@ -64,12 +69,18 @@ class LeafletMap {
     vis.theMap = L.map('my-map', {
       center: [30, 0],
       zoom: 2,
-      layers: [vis.base_layer]
+      layers: [vis.base_layer],
+	  selectArea: true
     });
+	
+	vis.theMap.on('areaselected', (e) => {
+		console.log(e.bounds);
+		console.log(e.bounds.toBBoxString()); // lon, lat, lon, lat
+		vis.filterData(e.bounds.toBBoxString());
+	});
 	
 	L.control.layers(vis.basemaps).addTo(vis.theMap);
 	
-	console.log(d3.extent(vis.data, d => d.year));
 	vis.colorType = 'year'; //this is used to determine how to color the map using the different color scales
 	vis.colorScaleYear = d3.scaleSequential()
 		.interpolator(d3.interpolateViridis)
@@ -83,14 +94,13 @@ class LeafletMap {
 		.domain(new Set(vis.data.map(d => d.phylum)))
 		.range(d3.schemeAccent);
 
-    //if you stopped here, you would just have a map
+
 
     //initialize svg for d3 to add to map
     L.svg({clickable:true}).addTo(vis.theMap)// we have to make the svg layer clickable
     vis.overlay = d3.select(vis.theMap.getPanes().overlayPane)
     vis.svg = vis.overlay.select('svg').attr("pointer-events", "auto")
 
-    //these are the city locations, displayed as a set of dots 
     vis.Dots = vis.svg.selectAll('circle')
                     .data(vis.data) 
                     .join('circle')
@@ -125,7 +135,7 @@ class LeafletMap {
 
                             //create a tool tip
                             d3.select('#tooltip')
-                                .style('opacity', 1)
+                                .style('display', 'block')
                                 .style('z-index', 1000000)
                                   // Format number with million and thousand separator
                                 .html(`<div class="tooltip-label"><l> Collector: ${d.recordedBy}</l><br>
@@ -162,20 +172,58 @@ class LeafletMap {
 									})
                               .attr('r', 3) //change radius
 
-                            d3.select('#tooltip').style('opacity', 0);//turn off the tooltip
+                            d3.select('#tooltip').style('display', 'none');//turn off the tooltip
 
                           })
-                        .on('click', (event, d) => { //experimental feature I was trying- click on point and then fly to it
+                        .on('click', (event, d) => { 
+                        		window.open(d.references);
+                        //experimental feature I was trying- click on point and then fly to it
                            // vis.newZoom = vis.theMap.getZoom()+2;
                            // if( vis.newZoom > 18)
                            //  vis.newZoom = 18; 
                            // vis.theMap.flyTo([d.latitude, d.longitude], vis.newZoom);
                           });
     
+	//legend stuff
+	vis.svg2.append("g")
+		.attr('class', 'legend')
+		.attr('transform', 'translate(0,20)');
+	
+	vis.legendClass = d3.legendColor()
+		.title('Legend')
+		.shape("path", d3.symbol().type(d3.symbolCircle).size(150))
+		.shapePadding(10)
+		.scale(vis.colorScaleClass)
+		.cellFilter(function(d){ return d.label !== '' });
+		
+	vis.svg2.select('.legend')
+		.call(vis.legendClass);
+
     //handler here for updating the map, as you zoom in and out           
     vis.theMap.on("zoomend", function(){
       vis.updateVis();
     });
+	
+	//brush stuff
+	
+	/*document.addEventListener('mousedown', (e) => {
+		if (e.button == 2) {vis.theMap.dragging.disable();}
+		}
+	);
+
+	document.addEventListener('mouseup', (e) => {
+		if (e.button == 2)	{ vis.theMap.dragging.enable(); }
+		}
+	);
+	
+	vis.brush = d3.brush()
+		.filter(function filter(event) {
+			return !event.ctrlKey;
+		})
+		.on("end", vis.brushed);
+	vis.svg.append('g')
+		.attr('class', 'brush')
+		.call(vis.brush);*/
 	
 
   }
@@ -196,6 +244,7 @@ class LeafletMap {
    
    //redraw based on new zoom- need to recalculate on-screen position
 	vis.Dots
+		.data(vis.data)
 		.join('circle')
 		  .attr("cx", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).x)
 		  .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).y)
@@ -216,6 +265,7 @@ class LeafletMap {
 						console.log('the fuck you doing');
 				}
 				});
+			
 
 	}
 
@@ -225,4 +275,22 @@ class LeafletMap {
     //not using right now... 
  
   }
+  
+  filterData(bLatLon)
+  {
+	  let vis = this;
+	  let newData = [];
+	  
+	  let latlon = bLatLon.split(',');
+	  vis.data.filter(function(d) {
+		  if(d.decimalLatitude <= parseFloat(latlon[3]) && d.decimalLatitude >= parseFloat(latlon[1]) && d.decimalLongitude >= parseFloat(latlon[0]) && d.decimalLongitude <= parseFloat(latlon[2]))
+		  {
+			  newData.push(d);
+		  }
+	  });
+	  console.log(newData);
+	  
+  }
+  
+  
 }

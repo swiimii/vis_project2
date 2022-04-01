@@ -112,14 +112,13 @@ class Timeline {
   		.on('mouseover', (event,d) => {
         console.log(d);
   			d3.select('#tooltip')
-            .style('opacity', 1)
             .style('display', 'block')
             .style('left', (event.pageX + 10) + 'px')   
             .style('top', (event.pageY + 10) + 'px')
             .html(`<div class="tooltip"><strong>${d.year}</strong> - ${d.count} samples</div>`);
         })
         .on('mouseleave', () => {
-          d3.select('#tooltip').style('opacity', 0);
+          d3.select('#tooltip').style('display', 'none');
         });	
 
 

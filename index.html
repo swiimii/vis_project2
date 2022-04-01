@@ -12,9 +12,14 @@
 	<button onclick="updateColor('SD')">Time Into Year</button>
 	<button onclick="updateColor('class')">Phylum</button>
 	</p>
-
-    <div id="my-map"></div>
-
+	
+	<body oncontextmenu="return false;">
+		<div class="wrapper">
+			<div id="my-map" class="map"></div>
+			<div id="map-legend" class="map"></div>
+		</div>
+	</body>
+	
     <div class="item1">
         <svg id="timeline"></svg>
         <button type="button" onclick="resetTimeline()">Reset</button>
@@ -35,20 +40,23 @@
     </div>
 
     <div>
-        
+        <!-- Create a div where the graph will take place -->
+        <svg id="tree"></svg>
     </div>
 
 
     
     <script src="js/d3.v6.min.js"></script>
     <script type="text/javascript" src="https://d3js.org/d3-array.v2.min.js"></script>
+	<script src="js/d3-legend.min.js"></script>
     <script src="js/leaflet.js"></script>
     <script src="js/barChart.js"></script>
-
+    <script src="js/tree.js"></script>
     <script src="js/main.js"></script>
     <script src="js/leafletMap.js"></script>
     <script src="js/timeline.js"></script>
     <script src="js/stackedBar.js"></script>
+	<script src="js/Map.SelectArea.min.js"></script>
 
     <div id="tooltip"></div>
 
