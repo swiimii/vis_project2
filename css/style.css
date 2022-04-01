@@ -1,6 +1,7 @@
 #my-map {
   width: 70%;
   height: 500px;
+  z-index: 1000;
 }
 #tooltip {
   position: absolute;
@@ -12,6 +13,14 @@
   font-weight: 600;
   padding: 2px 8px;
 }
+#my-map .map-legend {
+  z-index: 314159;
+  position:absolute;
+  bottom: 30px;
+  /* left: 0; */
+  
+}
+
 .tooltip-label {
   font-weight: 500;
   font-size: 10px;
