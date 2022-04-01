@@ -108,7 +108,7 @@ class Timeline {
   			.attr("y", d=>vis.yScale(d.count))
   			.attr("width", vis.xScale.bandwidth())
   			.attr("height", d=> vis.height - vis.yScale(d.count))
-  			.attr("fill", "steelblue")
+  			.attr("fill", "#80b1d3")
   		.on('mouseover', (event,d) => {
         console.log(d);
   			d3.select('#tooltip')

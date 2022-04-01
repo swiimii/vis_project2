@@ -6,7 +6,7 @@ class Tree {
         parentElement: _config.parentElement,
         containerWidth: _config.containerWidth || 800,
         containerHeight: _config.containerHeight || 800,
-        margin: { top: 50, bottom: 0, right: 0, left: 0 }
+        margin: { top: 40, bottom: 0, right: 0, left: 0 }
       }
   
       this.data = _data;
@@ -188,16 +188,31 @@ class Tree {
 
 
       if (!parent_el) {
-        vis.path = "";
+        vis.path = "All Samples -> ";
       }
+
+      vis.svg.selectAll("text").remove();
       
+      vis.svg.append("g")
+        .append("text")
+          .attr("x", 10)
+          .attr("y", 15)
+          .attr("font-size", "16px")
+          .attr("font-weight", "bold")
+          .text("Treemap of Data")
+
       vis.svg.append("g")
         .append("text")
           .attr("class", "title")
           .attr("x", 10)
-          .attr("y", 10) 
-          .attr("font-size", "12px")
-          .text(vis.path)
+          .attr("y", 30) 
+          .attr("font-size", "14px")
+          .text(function(d){ 
+            var string = vis.path + "select " + hierarchy[child_el];
+            if (child_el == 7) {
+              string = vis.path;
+            }
+            return (string);})
     
       vis.rects = vis.chart.selectAll(".rects")
         .data(root.leaves())
@@ -222,8 +237,8 @@ class Tree {
               string = "";
             }
             return (string);})
-          .style("maxWidth", function (d) { return d.x1 - d.x0; })
-          .style("overflow", "hidden")
+          //.style("maxWidth", function (d) { return d.x1 - d.x0; })
+          //.style("overflow", "hidden")
           .attr("font-size", "12px")
           .attr("fill", "white")
 
@@ -233,7 +248,9 @@ class Tree {
           if (child_el < 7) {
             console.log(clicked_d);
             filteredData = filteredData.filter(function(d) {return(d[hierarchy[child_el]] == clicked_d.data.child)});
-            vis.path  = vis.path + clicked_d.data.child + " ->\n ";
+
+            vis.path  = vis.path + clicked_d.data.child + " -> ";
+
             console.log(vis.path);
             console.log(filteredData);
             vis.updateVis(filteredData, child_el, child_el+1);

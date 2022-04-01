@@ -76,7 +76,8 @@ class BarChart {
       .attr('transform', 'rotate(-90)')
       .text(vis.config.yLabel)
       // These can be replaced by style if necessary
-      .attr('font-family', 'sans-serif')
+      //.attr('font-family', 'sans-serif')
+      .attr("font-weight", "bold")
       .attr('font-size', font_size)
 
     // Title label
@@ -86,7 +87,8 @@ class BarChart {
       .attr('text-anchor', 'middle')
       .text(vis.config.title)
       // These can be replaced by style if necessary
-      .attr('font-family', 'sans-serif')
+      //.attr('font-family', 'sans-serif')
+      .attr("font-weight", "bold")
       .attr('font-size', font_size)
 
     vis.updateVis();

@@ -56,7 +56,7 @@ d3.csv('data/occurrences.csv')
 
     tree = new Tree({
       'parentElement':'#tree',
-      'containerHeight':400,
+      'containerHeight':435,
       'containerWidth':800
     }, data);
 
@@ -71,7 +71,9 @@ d3.csv('data/occurrences.csv')
             leafletMap.data = filteredData;
             leafletMap.updateVis();
             UpdateBarCharts(filteredData);
-
+            leafletMap.data = filteredData;
+            leafletMap.updateVis();
+            tree.updateVis(filteredData, 0, 1);
           }
         });
 
@@ -108,6 +110,7 @@ function resetTimeline(){
   timeline.updateVis();
   leafletMap.data = allData;
   leafletMap.updateVis();
+  tree.updateVis(allData, 0, 1);
 
 }
 
@@ -122,5 +125,6 @@ function UpdateAllCharts(data = null) {
   timeline.updateVis();
   leafletMap.data = data;
   leafletMap.updateVis();
+  tree.updateVis(data, 0, 1);
 
 }
