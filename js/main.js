@@ -69,7 +69,9 @@ d3.csv('data/occurrences.csv')
             missingData.data = filteredData;
             missingData.updateVis();
             UpdateBarCharts(filteredData);
-
+            leafletMap.data = filteredData;
+            leafletMap.updateVis();
+            tree.updateVis(filteredData, 0, 1);
           }
         });
 
@@ -106,6 +108,7 @@ function resetTimeline(){
   timeline.updateVis();
   leafletMap.data = allData;
   leafletMap.updateVis();
+  tree.updateVis(allData, 0, 1);
 
 }
 
@@ -120,5 +123,6 @@ function UpdateAllCharts(data = null) {
   timeline.updateVis();
   leafletMap.data = data;
   leafletMap.updateVis();
+  tree.updateVis(filteredData, 0, 1);
 
 }
