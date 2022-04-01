@@ -129,7 +129,7 @@ class BarChart {
     if (vis.maxBars && vis.maxBars > 0 && vis.data_selections.size > vis.maxBars) {
       const list = [...vis.data_selections.entries()];
       const firstHalf = list.slice(0,vis.maxBars);
-      const secondHalf = list.slice(-vis.maxBars);
+      const secondHalf = list.slice(vis.maxBars);
       const otherTotal = d3.sum(secondHalf, d => d[1]);
       vis.data_selections = new Map(firstHalf);
       vis.data_selections.set("Other", otherTotal);
@@ -175,7 +175,7 @@ class BarChart {
           let filterSelection = Array.from(monthToNumber.keys()).includes(d) ? monthToNumber.get(d) : d;
           let newData = null;
           if (filterSelection == 'Other') {
-            newData = vis.filtered_data.filter((element) => !Array.from(vis.data_selections.keys()).includes(element[vis.data_selection]));
+            newData = vis.filtered_data.filter((element) => !(Array.from(vis.data_selections.keys()).includes(element[vis.data_selection])));
           } else {
             newData = vis.filtered_data.filter((element) => element[vis.data_selection] == filterSelection );
           }
