@@ -69,8 +69,15 @@ class LeafletMap {
     vis.theMap = L.map('my-map', {
       center: [30, 0],
       zoom: 2,
-      layers: [vis.base_layer]
+      layers: [vis.base_layer],
+	  selectArea: true
     });
+	
+	vis.theMap.on('areaselected', (e) => {
+		console.log(e.bounds);
+		console.log(e.bounds.toBBoxString()); // lon, lat, lon, lat
+		vis.filterData(e.bounds.toBBoxString());
+	});
 	
 	L.control.layers(vis.basemaps).addTo(vis.theMap);
 	
@@ -199,7 +206,7 @@ class LeafletMap {
 	
 	//brush stuff
 	
-	document.addEventListener('mousedown', (e) => {
+	/*document.addEventListener('mousedown', (e) => {
 		if (e.button == 2) {vis.theMap.dragging.disable();}
 		}
 	);
@@ -212,10 +219,11 @@ class LeafletMap {
 	vis.brush = d3.brush()
 		.filter(function filter(event) {
 			return !event.ctrlKey;
-		});
+		})
+		.on("end", vis.brushed);
 	vis.svg.append('g')
 		.attr('class', 'brush')
-		.call(vis.brush);
+		.call(vis.brush);*/
 	
 
   }
@@ -267,4 +275,22 @@ class LeafletMap {
     //not using right now... 
  
   }
+  
+  filterData(bLatLon)
+  {
+	  let vis = this;
+	  let newData = [];
+	  
+	  let latlon = bLatLon.split(',');
+	  vis.data.filter(function(d) {
+		  if(d.decimalLatitude <= parseFloat(latlon[3]) && d.decimalLatitude >= parseFloat(latlon[1]) && d.decimalLongitude >= parseFloat(latlon[0]) && d.decimalLongitude <= parseFloat(latlon[2]))
+		  {
+			  newData.push(d);
+		  }
+	  });
+	  console.log(newData);
+	  
+  }
+  
+  
 }
