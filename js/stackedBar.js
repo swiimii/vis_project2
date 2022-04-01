@@ -138,10 +138,30 @@ class stackedBar {
                 <li>Without: ${d.data.without}</li>
                 <li>With: ${d.data.with}</li>
                 <li>Total: ${d.data.without+d.data.with}</li>`);
-        })
-        .on('mouseleave', () => {
-          d3.select('#tooltip').style('display', 'none');
-        });	
+      })
+      .on('mouseleave', () => {
+        d3.select('#tooltip').style('display', 'none');
+      })
+      .on('click', (event, d) => {
+        filteredData = vis.data;
+        if (d[0] > 0) { //Without
+          if (d.data.group == 'GPS') {
+            filteredData = vis.data.filter((d) => d.latitude == 9999.99)
+          }
+          else {
+            filteredData = vis.data.filter((d)=>d.startDayOfYear == null)
+          }
+        }
+        else if (d[1] < d.data.without+d.data.with){ //With
+          if (d.data.group == 'GPS') {
+            filteredData = vis.data.filter((d) => d.latitude != 9999.99)
+          }
+          else {
+            filteredData = vis.data.filter((d)=>d.startDayOfYear != null)
+          }
+        }
+        UpdateAllCharts(filteredData);
+      });	
   }
 
 }

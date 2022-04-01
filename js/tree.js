@@ -233,7 +233,9 @@ class Tree {
           if (child_el < 7) {
             console.log(clicked_d);
             filteredData = filteredData.filter(function(d) {return(d[hierarchy[child_el]] == clicked_d.data.child)});
-            vis.path  = vis.path + clicked_d.data.child + " ->\n ";
+
+            vis.path  = vis.path + clicked_d.data.child + " -> ";
+
             console.log(vis.path);
             console.log(filteredData);
             vis.updateVis(filteredData, child_el, child_el+1);
