@@ -117,8 +117,8 @@ class LeafletMap {
 								case 'day of year':
 									return vis.colorScaleStartDay(d.startDayOfYear);
 									break;
-								case 'class':
-									return vis.colorScaleClass(d.class);
+								case 'phylum':
+									return vis.colorScaleClass(d.phylum);
 									break;
 								default:
 									console.log('the fuck you doing');
@@ -167,8 +167,8 @@ class LeafletMap {
 										case 'day of year':
 											return vis.colorScaleStartDay(d.startDayOfYear);
 											break;
-										case 'class':
-											return vis.colorScaleClass(d.class);
+										case 'phylum':
+											return vis.colorScaleClass(d.phylum);
 											break;
 										default:
 											console.log('the fuck you doing');
@@ -245,7 +245,7 @@ class LeafletMap {
 		{
 			vis.currentColorScale = vis.colorScaleStartDay;
 		}
-		else if (newColorScale == 'class')
+		else if (newColorScale == 'phylum')
 		{
 			vis.currentColorScale = vis.colorScaleClass;
 		}
@@ -287,8 +287,8 @@ class LeafletMap {
 								case 'day of year':
 									return vis.colorScaleStartDay(d.startDayOfYear);
 									break;
-								case 'class':
-									return vis.colorScaleClass(d.class);
+								case 'phylum':
+									return vis.colorScaleClass(d.phylum);
 									break;
 								default:
 									console.log('the fuck you doing');
@@ -337,8 +337,8 @@ class LeafletMap {
 										case 'day of year':
 											return vis.colorScaleStartDay(d.startDayOfYear);
 											break;
-										case 'class':
-											return vis.colorScaleClass(d.class);
+										case 'phylum':
+											return vis.colorScaleClass(d.phylum);
 											break;
 										default:
 											console.log('the fuck you doing');
